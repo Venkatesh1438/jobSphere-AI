@@ -6,6 +6,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.settings import api_settings
 from .models import User, UserRole, CandidateProfile, RecruiterProfile
 
@@ -289,4 +290,37 @@ class LoginSerializer(serializers.Serializer):
             'refresh': str(refresh),
             'user': authenticated_user
         }
+
+
+class LogoutSerializer(serializers.Serializer):
+    """
+    Serializer to handle user logout by validating and blacklisting
+    the provided refresh token.
+    """
+    refresh = serializers.CharField(
+        required=True,
+        error_messages={
+            'required': 'This field is required.',
+            'blank': 'This field may not be blank.'
+        }
+    )
+
+    def validate(self, attrs):
+        refresh = attrs.get('refresh')
+        try:
+            self.token_obj = RefreshToken(refresh)
+        except TokenError:
+            raise serializers.ValidationError({
+                "refresh": "Invalid or expired refresh token."
+            })
+        return attrs
+
+    def save(self, **kwargs):
+        try:
+            self.token_obj.blacklist()
+        except TokenError:
+            raise serializers.ValidationError({
+                "refresh": "Invalid or expired refresh token."
+            })
+
 

@@ -6,6 +6,7 @@ from .serializers import (
     CandidateRegistrationSerializer,
     RecruiterRegistrationSerializer,
     LoginSerializer,
+    LogoutSerializer,
 )
 
 
@@ -74,3 +75,23 @@ class LoginAPIView(GenericAPIView):
             "message": "Login successful.",
             "data": serializer.data
         }, status=status.HTTP_200_OK)
+
+
+class LogoutAPIView(GenericAPIView):
+    """
+    API View to handle user logout by blacklisting the refresh token.
+    Accepts POST requests only.
+    """
+    serializer_class = LogoutSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            "success": True,
+            "message": "Logout successful."
+        }, status=status.HTTP_200_OK)
+
