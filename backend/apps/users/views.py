@@ -2,7 +2,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
-from .serializers import CandidateRegistrationSerializer, RecruiterRegistrationSerializer
+from .serializers import (
+    CandidateRegistrationSerializer,
+    RecruiterRegistrationSerializer,
+    LoginSerializer,
+)
 
 
 class CandidateRegistrationAPIView(GenericAPIView):
@@ -51,3 +55,22 @@ class RecruiterRegistrationAPIView(GenericAPIView):
                 "role": user.role
             }
         }, status=status.HTTP_201_CREATED)
+
+
+class LoginAPIView(GenericAPIView):
+    """
+    API View to handle user login.
+    Accepts POST requests only.
+    """
+    serializer_class = LoginSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        return Response({
+            "success": True,
+            "message": "Login successful.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)

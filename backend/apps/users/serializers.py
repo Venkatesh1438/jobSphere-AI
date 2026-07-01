@@ -1,7 +1,12 @@
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import update_last_login
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from rest_framework import serializers
+from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.settings import api_settings
 from .models import User, UserRole, CandidateProfile, RecruiterProfile
 
 
@@ -213,4 +218,75 @@ class RecruiterRegistrationSerializer(serializers.ModelSerializer):
             )
 
         return user
+
+
+class SafeUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer to return non-sensitive, safe user information.
+    """
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name', 'role']
+        read_only_fields = fields
+
+
+class LoginSerializer(serializers.Serializer):
+    """
+    Serializer for handling user login with email and password,
+    authenticating, checking active status, conditionally updating
+    last_login, and generating JWT access and refresh tokens.
+    """
+    email = serializers.EmailField(write_only=True, required=True)
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'}
+    )
+    token_type = serializers.CharField(read_only=True, default='Bearer')
+    access = serializers.CharField(read_only=True)
+    refresh = serializers.CharField(read_only=True)
+    user = SafeUserSerializer(read_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        if not email or not password:
+            raise serializers.ValidationError("Email and password are required.")
+
+        # Check if the user exists first to distinguish between invalid credentials and inactive account
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise AuthenticationFailed("Invalid email or password.")
+
+        # If user exists but is inactive
+        if not user.is_active:
+            # Check password to prevent user enumeration security issues
+            if user.check_password(password):
+                raise PermissionDenied("User account is inactive.")
+            raise AuthenticationFailed("Invalid email or password.")
+
+        # Authenticate active user
+        authenticated_user = authenticate(
+            request=self.context.get('request'),
+            email=email,
+            password=password
+        )
+        if not authenticated_user:
+            raise AuthenticationFailed("Invalid email or password.")
+
+        # Conditionally update last login based on simple-jwt settings
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(None, authenticated_user)
+
+        # Generate tokens
+        refresh = RefreshToken.for_user(authenticated_user)
+
+        return {
+            'token_type': 'Bearer',
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': authenticated_user
+        }
 
