@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: jobsphere_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: jobsphere_db
+      MYSQL_USER: jobsphere_user
+      MYSQL_PASSWORD: jobsphere_password
+      MYSQL_ROOT_PASSWORD: jobsphere_root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - jobsphere_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: jobsphere_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - jobsphere_net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jobsphere_backend
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - DB_NAME=jobsphere_db
+      - DB_USER=jobsphere_user
+      - DB_PASSWORD=jobsphere_password
+      - DB_HOST=db
+      - DB_PORT=3306
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=django-insecure-development-secret-key-12345
+    depends_on:
+      - db
+      - redis
+    networks:
+      - jobsphere_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: jobsphere_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - jobsphere_net
+
+volumes:
+  mysql_data:
+
+networks:
+  jobsphere_net:
+    driver: bridge

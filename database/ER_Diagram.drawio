@@ -1,0 +1,22 @@
+<mxfile host="65bd71144e">
+    <diagram id="JobSphere_ERD" name="JobSphere ER Diagram">
+        <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="User_Table" value="User&#10;--&#10;+ id: UUID [PK]&#10;+ email: VARCHAR&#10;+ password_hash: VARCHAR&#10;+ role: ENUM&#10;+ created_at: DATETIME" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="80" width="180" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Job_Table" value="Job&#10;--&#10;+ id: UUID [PK]&#10;+ company_id: UUID [FK]&#10;+ title: VARCHAR&#10;+ description: TEXT&#10;+ status: VARCHAR&#10;+ created_at: DATETIME" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="320" y="80" width="180" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Application_Table" value="Application&#10;--&#10;+ id: UUID [PK]&#10;+ job_id: UUID [FK]&#10;+ candidate_id: UUID [FK]&#10;+ status: VARCHAR&#10;+ applied_at: DATETIME" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="300" width="180" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="AI_Analysis_Table" value="AI_Analysis&#10;--&#10;+ id: UUID [PK]&#10;+ application_id: UUID [FK]&#10;+ score: DECIMAL&#10;+ summary: TEXT&#10;+ evaluated_at: DATETIME" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="320" y="300" width="180" height="140" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

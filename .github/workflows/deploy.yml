@@ -1,0 +1,28 @@
+name: Deployment Workflow
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # Trigger deployment on version release tags (e.g. v1.0.0)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Backend Container
+      run: |
+        docker build -t jobsphere-backend:${{ github.ref_name }} ./backend
+
+    - name: Build Frontend Container
+      run: |
+        docker build -t jobsphere-frontend:${{ github.ref_name }} ./frontend
+
+    - name: Deployment Success Notification
+      run: |
+        echo "Successfully built and packaged version ${{ github.ref_name }} containers for deployment."
