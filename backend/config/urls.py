@@ -17,6 +17,9 @@ urlpatterns = [
     # API v1 Auth
     path('api/v1/auth/', include('apps.users.urls')),
     
+    # API v1 Jobs
+    path('api/v1/jobs/', include('apps.jobs.urls')),
+    
     # Simple JWT Auth
     path('api/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
