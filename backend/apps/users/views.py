@@ -8,6 +8,7 @@ from .serializers import (
     LoginSerializer,
     LogoutSerializer,
     MeUserSerializer,
+    ChangePasswordSerializer,
 )
 
 
@@ -111,4 +112,24 @@ class MeAPIView(GenericAPIView):
             "success": True,
             "data": serializer.data
         }, status=status.HTTP_200_OK)
+
+
+class ChangePasswordAPIView(GenericAPIView):
+    """
+    API View to handle password change for authenticated users.
+    Accepts POST requests only.
+    """
+    serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            "success": True,
+            "message": "Password changed successfully."
+        }, status=status.HTTP_200_OK)
+
 

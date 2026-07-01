@@ -345,3 +345,67 @@ class LogoutSerializer(serializers.Serializer):
             })
 
 
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer to handle changing user password.
+    Validates old password, ensures new passwords match, verifies the password strength,
+    and prevents reusing the current password.
+    """
+    old_password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'}
+    )
+    new_password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'}
+    )
+    confirm_password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'}
+    )
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        old_password = attrs.get('old_password')
+        new_password = attrs.get('new_password')
+        confirm_password = attrs.get('confirm_password')
+
+        # 1. Verify old password using user.check_password()
+        if not user.check_password(old_password):
+            raise serializers.ValidationError({
+                'old_password': 'Incorrect old password.'
+            })
+
+        # 2. Prevent users from changing their password to the same password they are currently using
+        if user.check_password(new_password):
+            raise serializers.ValidationError({
+                'new_password': 'New password cannot be the same as the old password.'
+            })
+
+        # 3. Ensure new_password and confirm_password match
+        if new_password != confirm_password:
+            raise serializers.ValidationError({
+                'confirm_password': 'Passwords do not match.'
+            })
+
+        # 4. Validate new password using Django password validators
+        try:
+            validate_password(new_password, user=user)
+        except DjangoValidationError as e:
+            raise serializers.ValidationError({
+                'new_password': list(e.messages)
+            })
+
+        return attrs
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.set_password(self.validated_data['new_password'])
+        user.save()
+        return user
+
+
+
