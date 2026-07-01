@@ -1,12 +1,13 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import (
     CandidateRegistrationSerializer,
     RecruiterRegistrationSerializer,
     LoginSerializer,
     LogoutSerializer,
+    MeUserSerializer,
 )
 
 
@@ -93,5 +94,21 @@ class LogoutAPIView(GenericAPIView):
         return Response({
             "success": True,
             "message": "Logout successful."
+        }, status=status.HTTP_200_OK)
+
+
+class MeAPIView(GenericAPIView):
+    """
+    API View to retrieve the current authenticated user's details.
+    Accepts GET requests only.
+    """
+    serializer_class = MeUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(request.user)
+        return Response({
+            "success": True,
+            "data": serializer.data
         }, status=status.HTTP_200_OK)
 

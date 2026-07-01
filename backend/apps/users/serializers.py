@@ -231,6 +231,27 @@ class SafeUserSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
+class MeUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer to return current logged-in user details.
+    """
+    profile_completed = serializers.BooleanField(source='is_profile_completed', read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'email',
+            'first_name',
+            'last_name',
+            'role',
+            'profile_completed',
+            'phone_number',
+            'is_email_verified',
+        ]
+        read_only_fields = fields
+
+
 class LoginSerializer(serializers.Serializer):
     """
     Serializer for handling user login with email and password,
