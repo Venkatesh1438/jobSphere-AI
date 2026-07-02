@@ -18,7 +18,7 @@ COPY requirements.txt .
 
 # Create python wheels to speed up construction in runner
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
+    && pip wheel --no-cache-dir --wheel-dir /app/wheels -r requirements.txt
 
 
 FROM python:3.12-slim AS runner
