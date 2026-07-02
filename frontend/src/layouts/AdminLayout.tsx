@@ -48,7 +48,7 @@ export default function AdminLayout() {
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800">
           <Link to="/" className="flex items-center space-x-2 text-white">
             <Briefcase className="h-6 w-6 text-primary-500" />
-            <span className="font-bold text-lg tracking-tight">JobSphere <span className="text-primary-500">Admin</span></span>
+            <span className="font-bold text-lg tracking-tight">JobBoard <span className="text-primary-500">Admin</span></span>
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1 rounded-lg hover:bg-slate-850 text-white">
             <X className="h-5 w-5" />

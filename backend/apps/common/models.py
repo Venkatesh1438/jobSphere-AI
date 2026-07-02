@@ -24,6 +24,11 @@ class SoftDeleteManager(models.Manager):
         return SoftDeleteQuerySet(self.model, using=self._db)
 
 
+class AllObjectsManager(models.Manager):
+    def get_queryset(self):
+        return SoftDeleteQuerySet(self.model, using=self._db)
+
+
 class BaseModel(models.Model):
     """
     Standard Abstract Model containing fields used across all database entities:
@@ -40,7 +45,7 @@ class BaseModel(models.Model):
     deleted_at = models.DateTimeField(null=True, blank=True)
 
     objects = SoftDeleteManager()
-    all_objects = models.Manager()
+    all_objects = AllObjectsManager()
 
     class Meta:
         abstract = True
