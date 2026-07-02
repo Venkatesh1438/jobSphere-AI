@@ -47,7 +47,7 @@ export default function RecruiterLayout() {
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-darkBorder">
           <Link to="/" className="flex items-center space-x-2 text-primary-600 dark:text-primary-400">
             <Briefcase className="h-6 w-6" />
-            <span className="font-bold text-lg tracking-tight text-slate-800 dark:text-white">JobSphere <span className="text-primary-650 dark:text-primary-450">Recruiter</span></span>
+            <span className="font-bold text-lg tracking-tight text-slate-800 dark:text-white">JobBoard <span className="text-primary-650 dark:text-primary-450">Recruiter</span></span>
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-darkBorder">
             <X className="h-5 w-5" />

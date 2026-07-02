@@ -8,7 +8,7 @@ export default function AuthLayout() {
         <div className="flex flex-col items-center justify-center">
           <Link to="/" className="flex items-center space-x-2 text-primary-600 dark:text-primary-400 mb-4">
             <Briefcase className="h-8 w-8" />
-            <span className="font-bold text-2xl tracking-tight text-slate-800 dark:text-white">JobSphere <span className="text-primary-600 dark:text-primary-400">AI</span></span>
+            <span className="font-bold text-2xl tracking-tight text-slate-800 dark:text-white">Job<span className="text-primary-600 dark:text-primary-400">Board</span></span>
           </Link>
           <h2 className="text-center text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             Welcome to the future of recruitment

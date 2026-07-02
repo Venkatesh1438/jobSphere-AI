@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile for JobSphere AI Backend
+# Multi-stage Dockerfile for JobBoard Backend
 FROM python:3.12-slim AS builder
 
 WORKDIR /app

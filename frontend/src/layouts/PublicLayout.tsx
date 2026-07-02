@@ -12,7 +12,7 @@ export default function PublicLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2 text-primary-600 dark:text-primary-400">
             <Briefcase className="h-6 w-6" />
-            <span className="font-bold text-xl tracking-tight text-slate-800 dark:text-white">JobSphere <span className="text-primary-600 dark:text-primary-400">AI</span></span>
+            <span className="font-bold text-xl tracking-tight text-slate-800 dark:text-white">Job<span className="text-primary-600 dark:text-primary-400">Board</span></span>
           </Link>
           
           <nav className="hidden md:flex space-x-8 text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -58,7 +58,7 @@ export default function PublicLayout() {
           <div>
             <span className="font-bold text-white text-lg flex items-center space-x-2">
               <Briefcase className="h-5 w-5 text-primary-500" />
-              <span>JobSphere AI</span>
+              <span>JobBoard</span>
             </span>
             <p className="mt-4 text-sm text-slate-500">Enterprise AI recruiting systems redefining global talent acquisitions.</p>
           </div>
@@ -85,7 +85,7 @@ export default function PublicLayout() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-850 text-center text-xs text-slate-600">
-          &copy; {new Date().getFullYear()} JobSphere AI. All rights reserved.
+          &copy; {new Date().getFullYear()} JobBoard. All rights reserved.
         </div>
       </footer>
     </div>
