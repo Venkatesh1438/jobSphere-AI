@@ -1,44 +1,244 @@
-# JobSphere AI - Enterprise AI Recruiting Platform
+# 🚀 JobBoard – Enterprise AI Recruitment Platform
 
-JobSphere AI is a production-grade, AI-powered recruitment SaaS application designed for candidate assessment, resume parsing, match scoring, and candidate-recruiter interaction.
+![React](https://img.shields.io/badge/React-19-blue)
+![Django](https://img.shields.io/badge/Django-5-green)
+![TypeScript](https://img.shields.io/badge/TypeScript-blue)
+![Python](https://img.shields.io/badge/Python-yellow)
+![MySQL](https://img.shields.io/badge/MySQL-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## Architecture
+## 📌 About JobBoard
 
-This project is organized as an enterprise monorepo:
-* **`/backend`**: Python 3.12, Django 5, Django REST Framework, Simple JWT, Django Channels, MySQL, and Redis.
-* **`/frontend`**: React 18.3.x, Vite, TypeScript, Tailwind CSS v3.4.x, React Router DOM, and React Query.
-* **`/database`**: Database schema documents, Draw.io ER diagram, and setup guides.
-* **`/docs`**: In-depth system design, API design patterns, and database specification sheets.
+JobBoard is a modern full-stack recruitment platform built using Django, React, TypeScript, and MySQL.
 
----
+It enables recruiters to publish job opportunities while allowing candidates to discover companies, search jobs, submit applications, and manage their career journey through a responsive dashboard.
 
-## Tech Stack
-
-### Frontend
-- **React**: 18.3.x (Ecosystem stability)
-- **Vite**: Modern builder
-- **TypeScript**: Typed safety
-- **Tailwind CSS**: v3.4.x utility-first styling
-- **React Query (TanStack)**: Server state synchronization
-- **Framer Motion**: Premium micro-animations
-- **Chart.js**: Hiring dashboards & recruiting funnel reports
-
-### Backend
-- **Python**: 3.12
-- **Django**: 5.x REST Framework
-- **Simple JWT**: JSON Web Token Authentication
-- **MySQL**: Persistent relational data store
-- **Django Channels**: WebSocket notifications & live chat
-- **drf-spectacular**: Swagger / OpenAPI 3.0 generation
+The application follows a production-oriented architecture with secure JWT authentication, role-based authorization, responsive UI components, lazy-loaded routes, API-driven data management, and an attractive showcase mode for first-time visitors.
 
 ---
 
-## Quick Start (with Docker Compose)
+## ✨ Features
 
-To spin up the entire application locally including the database, cache server, API backend, and web frontend:
+- Candidate Registration
+- Candidate Login
+- JWT Authentication
+- Browse Companies
+- Browse Jobs
+- Advanced Job Search
+- Job Details
+- Apply for Jobs
+- Withdraw Applications
+- Candidate Dashboard
+- Profile Management
+- Notifications
+
+### Recruiter 
+
+- Recruiter Registration
+- Company Management
+- Post Jobs
+- Edit Jobs
+- Publish Jobs
+- Manage Applicants
+- Recruiter Dashboard
+- Notifications
+
+---
+
+## Platform
+
+- Responsive UI
+- React Query
+- Lazy Loading
+- Animated Statistics
+- Toast Notifications
+- Global Search
+- Landing Page Showcase
+- Role-Based Routing
+- Protected Routes
+- Error Handling
+
+## Technology Stack
+
+| Frontend     | Backend               | Database             | Tools         |
+| ------------ | --------------------- | -------------------- | ------------- |
+| React 19     | Django                | MySQL                | Git           |
+| TypeScript   | Django REST Framework | SQLite (Development) | GitHub        |
+| Vite         | JWT Authentication    | PostgreSQL Ready     | Vercel        |
+| Tailwind CSS | REST APIs             |                      | Railway       |
+| React Query  | Python                |                      | Framer Motion |
+
+## Folder Structure
+
+JobBoard
+│
+├── backend
+│   ├── apps
+│   ├── config
+│   ├── manage.py
+│
+├── frontend
+│   ├── src
+│   │
+│   ├── api
+│   ├── assets
+│   ├── components
+│   ├── context
+│   ├── hooks
+│   ├── layout
+│   ├── pages
+│   ├── routes
+│   └── services
+│
+├── docs
+├── database
+└── docker-compose.yml
+
+## Installation Guide
+
+## Backend
 
 ```bash
-docker-compose up --build
+cd backend
+
+python -m venv venv
+
+venv\Scripts\activate
+
+pip install -r requirements.txt
+
+python manage.py migrate
+
+python manage.py runserver
+```
+## Frontend
+
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
+##Environmental Variables
+
+Backend
+
+SECRET_KEY=
+
+DEBUG=True
+
+DB_NAME=
+
+DB_USER=
+
+DB_PASSWORD=
+
+DB_HOST=
+
+DB_PORT=
+
+Frontend
+
+VITE_API_BASE_URL=http://localhost:8000/api
+
+## Authentication Flow
+
+Candidate
+
+↓
+
+Register
+
+↓
+
+Login
+
+↓
+
+JWT Token
+
+↓
+
+Protected Routes
+
+↓
+
+Dashboard
+
+↓
+
+Apply Job
+
+Similarly for recruiters
+
+Recruiter
+
+↓
+
+Register
+
+↓
+
+Login
+
+↓
+
+Create Company
+
+↓
+
+Post Jobs
+
+↓
+
+Manage Applicants
+
+## Database
+
+User
+
+Company
+
+Job
+
+Application
+
+Notification
+
+## Future Enhancements
+
+Email Verification
+
+Resume Parsing
+
+AI Resume Matching
+
+Interview Scheduling
+
+Chat System
+
+Video Interviews
+
+Admin Analytics
+
+Company Reviews
+
+Saved Jobs
+
+Dark Mode
+
+## License
+
+MIT License
+
+## Author 
+
+Developed by
+
+Venkatesh Yallabilli
+
+
 ```
 
 - **Frontend**: [http://localhost:5173](http://localhost:5173)
