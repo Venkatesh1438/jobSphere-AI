@@ -83,3 +83,10 @@ db.sqlite3
 # OS files
 .DS_Store
 Thumbs.db
+
+# Django Media Files
+media/
+backend/media/
+
+# Uploaded files
+uploads/
