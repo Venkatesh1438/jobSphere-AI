@@ -12,6 +12,12 @@ from rest_framework_simplejwt.views import (
 )
 from apps.applications.views import JobApplyAPIView, JobApplicationsListAPIView
 
+from django.http import JsonResponse
+
+def health(request):
+    return JsonResponse({"status": "ok"})
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     
@@ -40,4 +46,6 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
+    path("", health),
 ]
