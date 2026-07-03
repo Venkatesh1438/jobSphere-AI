@@ -24,7 +24,6 @@ The application follows a production-oriented architecture with secure JWT authe
 - JWT Authentication
 - Browse Companies
 - Browse Jobs
-- Advanced Job Search
 - Job Details
 - Apply for Jobs
 - Withdraw Applications
