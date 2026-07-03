@@ -60,9 +60,11 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       console.error(err)
+      // Check Axios error body first, then plain Error message, then fall back to generic message
       const errorMsg =
         err.response?.data?.detail ||
         err.response?.data?.message ||
+        (err.message && err.message !== 'Network Error' ? err.message : null) ||
         'Authentication failed. Please verify your email and password.'
       toast.error(errorMsg)
     } finally {

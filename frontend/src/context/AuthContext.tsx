@@ -108,14 +108,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true)
     try {
       const response = await api.post('/auth/login/', { email, password })
+
+      // Validate the expected nested response shape from the backend:
+      // { success: true, data: { access, refresh, user } }
       if (response.data?.success && response.data?.data) {
         const { access, refresh, user: userData } = response.data.data
+
+        if (!access || !refresh || !userData) {
+          // Backend returned 200 + success=true but fields are missing
+          const err: any = new Error('Incomplete authentication data received from server.')
+          err.response = { data: { message: 'Incomplete authentication data received from server.' } }
+          throw err
+        }
+
         localStorage.setItem('access_token', access)
         localStorage.setItem('refresh_token', refresh)
         setUser(userData)
         return response.data
       }
-      throw new Error('Authentication response malformed')
+
+      // Backend returned 200 but success flag is false or data is absent
+      const message =
+        response.data?.message ||
+        response.data?.detail ||
+        'Login failed. Please check your credentials.'
+      const err: any = new Error(message)
+      err.response = { data: { message } }
+      throw err
     } catch (error) {
       setUser(null)
       throw error
