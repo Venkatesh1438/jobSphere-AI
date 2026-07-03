@@ -12,9 +12,15 @@ export const api = axios.create({
 // Attach access token to headers
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token')
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`
+    // Prevent attaching auth header for public login and register endpoints
+    const publicUrls = ['/auth/login/', '/auth/register/candidate/', '/auth/register/recruiter/']
+    const isPublic = config.url && publicUrls.some(url => config.url?.endsWith(url))
+
+    if (!isPublic) {
+      const token = localStorage.getItem('access_token') || localStorage.getItem('guest_token')
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
     }
     return config
   },
@@ -27,7 +33,13 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
     
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Do not attempt token refresh for public login and register requests
+    const isAuthRequest = originalRequest.url && (
+      originalRequest.url.includes('/auth/login/') ||
+      originalRequest.url.includes('/auth/register/')
+    )
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
       originalRequest._retry = true
       const refreshToken = localStorage.getItem('refresh_token')
       
@@ -48,7 +60,7 @@ api.interceptors.response.use(
           // Token expired or revoked, flush session and log out
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
-          window.location.href = '/auth/login'
+          window.location.href = '/login'
           return Promise.reject(refreshError)
         }
       }
